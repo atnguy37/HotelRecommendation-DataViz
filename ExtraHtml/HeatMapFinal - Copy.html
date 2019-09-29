@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<title>Hotel Genie</title>
+<meta charset="utf-8">
+<style>
+
+
+
+</style>
+
+<link href="css/style.css" rel="stylesheet">
+<link crossorigin="anonymous" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
+integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="js/chernoff-comment.js"></script>
+<script src="js/cloud2.js"></script>
+<script src="js/layout.cloud.js"></script>
+<script src="https://d3js.org/queue.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/2.4.4/seedrandom.min.js"></script>
+<!-- <script src="http://d3js.org/d3.v3.min.js"></script> -->
+
+
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js" charset="utf-8"></script> -->
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+<div class="row nopadding">
+	<div class="col-sm-9 nopadding"><div id="map"></div></div>
+	<div class="col-sm-3 nopadding">
+		<div id="mapRightControl">
+			<p id="selectCityTitle"class="title">Choose a City</p>
+			<div class="citycontainer">
+				<ul id="citylist">
+					<li class="inactive" data-id="0" value="New York City">New York City</li>
+					<li class="inactive" data-id="1" value="Los Angeles">Los Angeles</li>
+					<li class="inactive" data-id="2" value="San Diego">San Diego</li>
+					<li class="inactive" data-id="3" value="San Jose">San Jose</li>
+					<li class="inactive" data-id="4" value="San Francisco">San Francisco</li>
+					<li class="inactive" data-id="5" value="Houston">Houston</li>
+					<li class="inactive" data-id="6" value="San Antonio">San Antonio</li>
+					<li class="inactive" data-id="7" value="Dallas">Dallas</li>
+					<li class="inactive" data-id="8" value="Austin">Austin</li>
+					<li class="inactive" data-id="9" value="Fort Worth">Fort Worth</li>
+					<li class="inactive" data-id="10" value="El Paso">El Paso</li>
+					<li class="inactive" data-id="11" value="Chicago">Chicago</li>
+					<li class="inactive" data-id="12" value="Philadelphia">Philadelphia</li>
+					<li class="inactive" data-id="13" value="Phoenix">Phoenix</li>
+					<li class="inactive" data-id="14" value="Jacksonville">Jacksonville</li>
+					<li class="inactive" data-id="15" value="Indianapolis">Indianapolis</li>
+					<li class="inactive" data-id="16" value="Columbus">Columbus</li>
+					<li class="inactive" data-id="17" value="Detroit">Detroit</li>
+					<li class="inactive" data-id="18" value="Charlotte">Charlotte</li>
+					<li class="inactive" data-id="19" value="Memphis">Memphis</li>
+					<li class="inactive" data-id="20" value="Seattle">Seattle</li>
+					<li class="inactive" data-id="21" value="Boston">Boston</li>
+					<li class="inactive" data-id="22" value="Baltimore">Baltimore</li>
+					<li class="inactive" data-id="23" value="Denver">Denver</li>
+					<li class="inactive" data-id="24" value="Washington DC">Washington DC</li>
+				</ul>
+			</div>
+
+			<p id="selectClassTitle"class="title">Choose a Class</p>
+			<div id="classButtonGroup">
+				<div class="btn-group" role="group" aria-label="Select a Star">
+					<button id="class1" type="button" class="btn btn-secondary star-button" value="1"><i class="fa fa-star fa-lg star-icon" aria-hidden="true"></i></button>
+					<button id="class2" type="button" class="btn btn-secondary star-button" value="2"><i class="fa fa-star fa-lg star-icon" aria-hidden="true"></i></button>
+					<button id="class3" type="button" class="btn btn-secondary star-button" value="3"><i class="fa fa-star fa-lg star-icon" aria-hidden="true"></i></button>
+					<button id="class4" type="button" class="btn btn-secondary star-button" value="4"><i class="fa fa-star fa-lg star-icon" aria-hidden="true"></i></button>
+					<button id="class5" type="button" class="btn btn-secondary star-button" value="5"><i class="fa fa-star fa-lg star-icon" aria-hidden="true"></i></button>
+					<button id="class6" type="button" class="btn btn-secondary star-button" value="6">Show All</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+</div>
+<!-- 
+code to change
+<div class="row" style="display: none"> -->
+	<div class="row">
+		<div class="col heatmap" style="padding-left: 3%!important">
+		</div>
+		<div class = "col timeseriesClass">
+			<h5 class="g-hed"></h5>
+			<!-- <p class="g-intro"></p> -->
+			<div class="g-chart"></div>
+			<!-- <div class="g-source"><span class="g-source-bold"></span><span class="g-source-reg"></span></div> -->
+		</div>
+	</div>
+
+	<div class="row nopadding CompareHotels" style="display: none">
+		<div class="col-sm-3" style="">
+			<div class="topHotelsCss" >Most Clean</div> 
+			<div class="">
+				<ul id="CleanlinessID" style="list-style: none"></ul>
+
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="topHotelsCss">Best in Service Satisfaction</div>
+			<div class="">
+				<ul id="ServiceID" style="list-style: none"></ul>
+
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="nopadding topHotelsCss">Best in Room Quality</div>
+			<div class="">
+				<ul id="RoomID" style="list-style: none"></ul>
+
+			</div>
+		</div>
+		<div class="col-sm-3">
+			<div class="nopadding topHotelsCss">Best Surroungings</div>
+			<div class="">
+				<ul id="SurroungingsID" style="list-style: none"></ul>
+
+			</div>
+		</div>
+	</div>
+
+
+	<div id="row" class="Radar" style="text-align: center;min-height: 500px;display: none">
+		<div class="col" id="MatchWinner" style="margin-top: 1%;font-size: 12px;">
+		</div>
+		<div  id="radarChart" class="radarChart col">
+			</div>
+			</div>
+		<text class="SelectedHotelNameHidden" style="display: none;"></text>
+		<div class="wordCloud" style="display: none">
+</div>
+
+
+	<div class="container" style="display: none">
+</div>
+
+	<!-- ServiceID RoomID SurroungingsID -->
+	<!-- Jay's Script -->
+	<script>
+		function initMap() {
+// var center = {lat: 34.052235, lng: -118.243683};
+var mapOptions = {
+// How zoomed in you want the map to start at (always required)
+zoom: 5,
+
+// The latitude and longitude to center the map (always required)
+center: new google.maps.LatLng(37.0902, -95.7129),
+
+// How you would like to style the map.
+// This is where you would paste any style found on Snazzy Maps.
+styles: [{"featureType":"landscape.natural","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"color":"#e0efef"}]},{"featureType":"poi","elementType":"geometry.fill","stylers":[{"visibility":"on"},{"hue":"#1900ff"},{"color":"#c0e8e8"}]},{"featureType":"road","elementType":"geometry","stylers":[{"lightness":100},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit.line","elementType":"geometry","stylers":[{"visibility":"on"},{"lightness":700}]},{"featureType":"water","elementType":"all","stylers":[{"color":"#7dcdcd"}]}]
+};
+
+var mapElement = document.getElementById('map');
+var map = new google.maps.Map(mapElement, mapOptions);
+// var map = new google.maps.Map(
+//     document.getElementById('map'), {zoom: 9, center: center});
+// var locations = [
+//     // ['<div class="infoWin"><div class="hotelName">Hotel Beacon</div><div class="hotelAddress">W 75 St, New York, NY, US</div><div class="star-ratings-sprite"><span style="width:60.0%" class="star-ratings-sprite-rating"></span></div></div>', 40.782483, -73.984777, 3.0, 'http://www.tripadvisor.com/Hotel_Review-g60763-d93338-Reviews-Hotel_Beacon-New_York_City_New_York.html'],
+//     // ['<div class="infoWin"><div class="hotelName">Casablanca Hotel Times Square</div><div class="hotelAddress">147 W 43rd St, New York, 10036</div><div class="star-rating" title="94%"><div class="back-stars"><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><div class="front-stars" style="width: 94%"><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i><i class="fa fa-star fa-xs" aria-hidden="true"></i></div></div></div></div>', 34.052235, -118.243683],
+//     ["<div class=\"infoWin\"><div class=\"hotelName\">Hotel Contessa</div><div class=\"hotelAddress\">306 West Market Street, San Antonio, TX 78205, US</div><div><strong>Average User Rating:</strong> 3.4 | <strong>Total Review:</strong> 400</div><div><strong>Hotel Class</strong></div><div class=\"star-ratings-sprite\"><span style=\"width:60%\" class=\"star-ratings-sprite-rating\"></span></div></div>",
+//         29.4232709,
+//         -98.4895233,
+//         84.42,
+//         "http://www.tripadvisor.com/Hotel_Review-g60956-d570285-Reviews-Hotel_Contessa-San_Antonio_Texas.html" ]
+// ];
+//
+// var infowindow = new google.maps.InfoWindow({});
+// var marker, count;
+//
+// for (count = 0; count < locations.length; count++) {
+//     marker = new google.maps.Marker({
+//         position: new google.maps.LatLng(locations[count][1], locations[count][2]),
+//         map: map
+//         // title: locations[count][0],
+//     });
+//
+//     google.maps.event.addListener(marker, 'mouseover', (function (marker, count) {
+//         return function () {
+//             infowindow.setContent(locations[count][0]);
+//             infowindow.open(map, marker);
+//         }
+//     })(marker, count));
+//     //
+//     // google.maps.event.addListener(marker, 'mouseout', (function (marker, count) {
+//     //     return function () {
+//     //         infowindow.close(map, marker);
+//     //     }
+//     // })(marker, count));
+// }
+}
+
+// function toggleBounce() {
+//     if (marker.getAnimation() !== null) {
+//         marker.setAnimation(null);
+//     } else {
+//         marker.setAnimation(google.maps.Animation.BOUNCE);
+//     }
+// }
+</script>
+<script async
+defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCTZ8-KFRNUNOFhjUvBuR9XeTK89bVsB6U&callback=initMap"></script>
+<script src="js/main.js"></script>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
+
+<!-- Jay's Script End -->
+
+<!-- Hardik's Script Starts for Heat Map -->
+<script>
+
+function GetHotelName(CityHotelRef){
+		d3.csv('service_ratings_avg.csv', function ( response ) {
+		response.forEach(function(d) {
+		if(d.hotel == CityHotelRef){
+			$('.SelectedHotelNameHidden').empty();
+			//alert("here");
+			Hotel1NameGlobal = d.name;
+			$('.SelectedHotelNameHidden').attr(d.category, d.value);
+			$('.SelectedHotelNameHidden').html(Hotel1NameGlobal);
+	}
+});
+});
+}
+
+
+
+// Standard deviation
+function RMS(arr){
+	return Math.pow(arr.reduce(function(acc,pres){
+		return acc+ Math.pow(pres,2);
+	})/arr.length,.5)
+}
+
+// mean
+function mean(arr){
+	return arr.reduce(function(acc,prev){
+		return acc+prev;
+	})/arr.length;
+}
+
+var lPatchWidth=200;
+var itemSize = 40,
+cellSize = itemSize - 3,
+margin = {top: 50, right: 20, bottom: 120, left: 80};
+
+var data;
+
+var width = 700 - margin.right - margin.left,
+height = 500 - margin.top - margin.bottom;
+var colorScale;
+
+// colorHold=["#D3D0CB","#F2D7EE","#D3BCC0","#A5668B","#69306D","#0E103D"]
+// colorLText=["0-1.0","1.01-2.0","2.01-3.0","3.01-4.0","4.0-5.0","5+"]
+
+colorHold=["#D3D0CB","#F2D7EE","#D3BCC0","#A5668B","#69306D","#0E103D"]
+colorLText=["0","1","2","3","4","5"]
+function bandClassifier(val)
+{
+
+	if(val >= 5){
+		return 5;
+	}
+	else if(val >= 4 && val <5 ){
+		return 4;
+	}
+	else if(val >= 3 && val <4 ){
+		return 3;
+	}
+	else if(val >= 2 && val <3 ){
+		return 2;
+	}
+	else if(val >= 1 && val <2 ){
+		return 1;
+	}
+	else{
+		return 0;
+	}
+}
+
+function HeatMapGenerator(HotelIdNumber)
+{
+	$('.heatmap').html("");
+// window.onload=function(){
+	d3.csv('heatmap.csv', function ( response ) {
+
+		data = response.filter(function( item ) {
+			if(item.ID == HotelIdNumber){
+				item.country = item.x;
+				item.product = item.y;
+				item.HotelID = item.ID;
+				item.value = item.value;
+				return item;
+			}
+		})
+		invertcolors=0;
+// Inverting color scale
+if(invertcolors){
+	colorHold.reverse();
+}
+
+var x_elements = d3.set(data.map(function( item ) { return item.product; } )).values(),
+y_elements = d3.set(data.map(function( item ) { return item.country; } )).values();
+
+var xScale = d3.scaleBand()
+.domain(x_elements)
+.range([0, x_elements.length * itemSize])
+.paddingInner(20).paddingOuter(cellSize/2)
+
+var xAxis = d3.axisBottom()
+.scale(xScale)
+.tickFormat(function (d) {
+	return d;
+});
+
+var yScale = d3.scaleBand()
+.domain(y_elements)
+.range([0, y_elements.length * itemSize])
+.paddingInner(.2).paddingOuter(.2);
+
+var yAxis = d3.axisLeft()
+.scale(yScale)
+.tickFormat(function (d) {
+	return d;
+});
+
+
+// Finding the mean of the data
+var mean=window.mean(data.map(function(d){return +d.value}));
+
+//setting percentage change for value w.r.t average
+data.forEach(function(d){
+//	console.log(mean);
+// d.perChange=(d.value-mean)/mean
+d.perChange = d.value;
+})
+
+colorScale = d3.scaleOrdinal()
+.domain([0,1,2,3,4,5])
+.range(colorHold);
+
+var rootsvg = d3.select('.heatmap')
+.append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.attr("overflow", "visible!important")
+var svg=rootsvg.append("g")
+.attr("transform", "translate(160,50)");
+
+// tooltip
+tooltip=d3.select("body").append("div").style("width","60px").style("height","60px").style("background","#C3B3E5")
+.style("opacity","1").style("position","absolute").style("visibility","hidden").style("box-shadow","0px 0px 6px #7861A5").style("padding","5px");
+toolval=tooltip.append("div");
+
+
+var cells = svg.selectAll('rect')
+.data(data)
+.enter().append('g').append('rect')
+.attr('class', 'cell')
+.attr('width', cellSize)
+.attr('height', cellSize)
+.attr('y', function(d) { return yScale(d.country); })
+.attr('x', function(d) { return xScale(d.product)-cellSize/2; })
+.attr('fill', function(d) { return colorScale(window.bandClassifier(d.perChange));})
+.attr("rx",10)
+.attr("ry",10)
+.on("mouseover",function(d){
+// console.log(d);
+//d3.select(this).attr("fill","#655091");
+d3.select(this).style("stroke","orange").style("stroke-width","3px").style("cursor","grab")
+d3.select(".trianglepointer").transition().delay(100).attr("transform","translate("+(-((lPatchWidth/colorScale.range().length)/2+(colorScale.domain().indexOf(bandClassifier(d.perChange))*(lPatchWidth/colorScale.range().length) )))+",0)");
+
+d3.select(".LegText").select("text").text(colorLText[colorScale.domain().indexOf(bandClassifier(d.perChange))])
+
+
+})
+.on("mouseout",function(){
+//d3.select(this).attr('fill', function(d) { return colorScale(window.bandClassifier(d.perChange));});
+d3.select(this).style("stroke","none");
+tooltip.style("visibility","hidden");
+})
+.on("mousemove",function(d){
+	tooltip.style("visibility","visible")
+	.style("top",(d3.event.pageY-30)+"px").style("left",(d3.event.pageX+20)+"px");
+
+// console.log(d3.mouse(this)[0])
+tooltip.select("div").html("<strong>"+d.product+"</strong><br/> "+(+d.value).toFixed(2))
+
+})
+
+svg.append("g")
+.attr("class", "y axis")
+.call(yAxis)
+.selectAll('text')
+.attr('font-weight', 'normal');
+
+svg.append("g")
+.attr("class", "x axis")
+.attr("transform","translate(0,"+(y_elements.length * itemSize +cellSize/2)+")")
+.call(xAxis)
+.selectAll('text')
+.attr('font-weight', 'normal')
+.style("text-anchor", "end")
+.attr("dx", "-.8em")
+.attr("dy", "-.5em")
+.attr("transform", function (d) {
+	return "rotate(-65)";
+});
+
+// Legends section
+
+legends=svg.append("g").attr("class","legends")
+.attr("transform","translate("+((width+margin.right)/2-lPatchWidth/2 -margin.left/2)+","+(350)+")");
+
+// Legend traingle pointer generator
+var symbolGenerator = d3.symbol()
+.type(d3.symbolTriangle)
+.size(64);
+
+legends.append("g").attr("transform","rotate(180)").append("g").attr("class","trianglepointer")
+.attr("transform","translate("+(-lPatchWidth/colorScale.range().length)/2+")")
+.append("path").attr("d",symbolGenerator());
+//Legend Rectangels
+legends.append("g").attr("class","LegRect")
+.attr("transform","translate(0,"+15+")")
+.selectAll("rect").data(colorScale.range()).enter()
+.append("rect").attr("width",lPatchWidth/colorScale.range().length+"px").attr("height","10px").attr("fill",function(d){ return d})
+.attr("x",function(d,i){ return i*(lPatchWidth/colorScale.range().length) })
+
+// legend text
+legends.append("g").attr("class","LegText")
+.attr("transform","translate(0,45)")
+.append("text")
+.attr("x",lPatchWidth/2)
+.attr('font-weight', 'normal')
+.style("text-anchor", "middle")
+.text(colorLText[0])
+
+// Heading 
+rootsvg.append("g")
+.attr("transform","translate(0,30)")
+.append("text")
+.attr("x",(width+margin.right+margin.left)/2)
+.attr('font-weight', 'bold')
+.attr('font-size', '22px')
+.attr('font-family', 'Segoe UI bold')
+.style("text-anchor", "middle")
+.text("Hotel '" + $('.SelectedHotelNameHidden').html() + "' Characteristics Heatmap")
+
+});
+}
+</script>
+<!-- Hardik's Script Ends for Heat Map -->
+<!-- Hardik's Script Starts for Time Series -->
+
+<script>
+
+//Loads the data
+
+function TimeSeriesGenerator(HotID){
+// alert();
+// $('.timeseriesClass').html("");
+
+$('.g-chart').html("");
+$('.g-hed').html("");
+
+var l=0;
+
+d3.csv("TimeSeries.csv", ready);
+function ready(err, data) {
+
+	if (err) throw "error loading data";
+	// console.log("hello");
+
+	data = data.filter(function( item ) {
+		if(item.ID == HotID){
+			item.num = +item.num;
+			item.date = Date.parse(item.date);
+			l=l+1;
+			return item;
+		}
+	});
+
+//Margin conventions
+var data1;
+var margin = {top: 50, right: 20, bottom: 120, left: 110};
+
+var width = 650 - margin.right - margin.left,
+height = 500 - margin.top - margin.bottom;
+
+//Parses date for correct time format
+var parseDate = d3.timeFormat("%Y-%m").parse;
+
+//Divides date for tooltip placement
+var bisectDate = d3.bisector(function(d) { return d.date; }).left;    
+
+//Appends the svg to the chart-container div
+var svg = d3.select(".g-chart").append("svg")
+.attr("width", width + margin.left + margin.right)
+.attr("height", height + margin.top + margin.bottom)
+.append("g")
+.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+//Creates the xScale 
+var xScale = d3.scaleTime()
+.range([0, width]);
+
+//Creates the yScale
+var yScale = d3.scaleLinear()
+.range([height, 0]);
+
+//Defines the y axis styles
+var yAxis = d3.axisLeft(yScale)
+.tickSize(-width)
+.tickPadding(8);
+// .orient("left");
+
+//Defines the y axis styles
+var xAxis = d3.axisBottom(xScale)
+.tickPadding(8)
+// .orient("bottom")
+.tickSize(height)
+.ticks(numTicks(l))
+.tickFormat(d3.timeFormat("%Y")); 
+
+//line function convention (feeds an array)
+var line = d3.line()
+.x(function(d) { return xScale(d.date); })
+.y(function(d) { return yScale(d.num); });    
+
+
+
+
+//Appends chart headline
+d3.select(".g-hed").text("Overall Rating of Hotel '" + $('.SelectedHotelNameHidden').html() + "'");
+
+//Appends chart intro text
+// d3.select(".g-intro").text("Chart intro text goes here. Write a short sentence describing the chart here.");
+
+data.sort(function(a,b) { return a.date - b.date; });
+
+//Defines the xScale max
+xScale.domain(d3.extent(data, function(d) { return d.date; }));
+// console.log(xScale);
+
+//Defines the yScale max
+
+yScale.domain([0, 5]);
+
+//Appends the y axis
+var yAxisGroup = svg.append("g")
+.attr("class", "y axis")
+.call(yAxis);
+
+//Appends the x axis        
+var xAxisGroup = svg.append("g")
+.attr("class", "x axis")
+.call(xAxis);
+
+//Binds the data to the line
+var drawline = svg.append("path")
+.datum(data)
+.attr("class", "line")
+.attr("d", line);       
+
+//Tooltips
+var focus = svg.append("g")
+.attr("class", "focus")
+.style("display", "none");
+
+//Adds circle to focus point on line
+focus.append("circle")
+.attr("r", 7);
+
+//Adds text to focus point on line    
+focus.append("text")
+.attr("x", 12)
+.attr("dy", "-1em");    
+
+//Creates larger area for tooltip   
+var overlay = svg.append("rect")
+.attr("class", "overlay")
+.attr("width", width)
+.attr("height", height)
+.on("mouseover", function() { focus.style("display", null); })
+.on("mouseout", function() { focus.style("display", "none"); })
+.on("mousemove", mousemove);
+
+//Tooltip mouseovers            
+function mousemove() {
+// console.log(data);
+var x0 = xScale.invert(d3.mouse(this)[0]),
+i = bisectDate(data, x0, 1),
+d0 = data[i - 1],
+d1 = data[i],
+d = x0 - d0.date > d1.date - x0 ? d1 : d0;
+focus.attr("transform", "translate(" + xScale(d.date) + "," + yScale(d.num) + ")");
+focus.select("text").text(d.num);
+}; 
+
+// //RESPONSIVENESS
+// d3.select(window).on("resize", resized);
+
+// function resized() {
+
+// //new margin
+// var newMargin = {top: 10, right: 80, bottom: 20, left: 50};
+
+// //Get the width of the window
+// var w = d3.select(".g-chart").node().clientWidth;
+// console.log("resized", w);
+
+// //Change the width of the svg
+// d3.select("svg")
+// .attr("width", w);
+
+// //Change the xScale
+// xScale
+// .range([0, w - newMargin.right]);
+
+// //Update the line
+// line = d3.svg.line()
+// .x(function(d) { return xScale(d.date); })
+// .y(function(d) { return yScale(d.num); }); 
+
+// d3.selectAll('.line')
+// .attr("d", line);  
+
+
+// //Updates xAxis
+// xAxisGroup
+// .call(xAxis);   
+
+// //Updates ticks
+// xAxis
+// .scale(xScale)
+// .ticks(numTicks(w));
+
+// //Updates yAxis  
+// yAxis
+// .tickSize(-w - newMargin.right)
+// };
+}
+}
+
+// //Determines number of ticks base on width
+function numTicks(widther) {
+// return 12;
+// alert(widther);
+return widther;
+// if (widther <= 900) {
+// 	return 4;
+// 	// console.log("return 4");
+// }
+// else {
+// 	return 12;		
+// 	// console.log("return 5");
+// }
+}
+</script>
+<!-- Hardik's Script Ends for Time Series -->
+<!-- Script for adding top picks buttons -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script> -->
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-legend/1.3.0/d3-legend.js" charset="utf-8"></script> -->
+<script src="js/radarChart.js"></script>
+<script>
+	var cityIDForRef="";
+	var cityHotelIFRef ="";
+	var Hotel1NameGlobal ="";
+	function appendButton(CityHotelRef, CityId){
+	$('.SelectedHotelNameHidden').html("");
+// 		d3.csv('service_ratings_avg.csv', function ( response ) {
+// 		response.forEach(function(d) {
+// 		if(d.hotel == CityHotelRef){
+// 			$('.SelectedHotelNameHidden').empty();
+// 			//alert("here");
+// 			Hotel1NameGlobal = d.name;
+// 			$('.SelectedHotelNameHidden').attr(d.category, d.value);
+// 			$('.SelectedHotelNameHidden').html(Hotel1NameGlobal);
+// 	}
+// });
+// });
+// alert(Hotel1NameGlobal);
+
+
+		if(cityIDForRef != CityId || cityHotelIFRef != CityHotelRef)
+		{
+			cityIDForRef = CityId;
+			cityHotelIFRef != CityHotelRef;
+	$('.CompareHotels').show();
+	$('#CleanlinessID').empty();
+	$('#ServiceID').empty();
+	$('#SurroungingsID').empty();
+	$('#RoomID').empty();
+// topHotelsCss CleanlinessID ServiceID SurroungingsID RoomID
+
+
+d3.csv('top_hotel.csv', function ( response ) {
+//console.log(response[0]);
+response.forEach(function(d) {
+	if(d.city==CityId && d.category == "cleanliness"){    
+
+		d3.csv('service_ratings_avg.csv', function ( responset ) {
+			var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+			responset.forEach(function(t) {
+				if(t.category == "service" && t.hotel == d.hotel_1)
+					compareService = t.value;
+				else if(t.category == "cleanliness" && t.hotel == d.hotel_1){
+					compareCleanliness = t.value;
+				}
+				else if(t.category == "overall" && t.hotel == d.hotel_1){
+					compareOverall = t.value;
+				}
+				else if(t.category == "value" && t.hotel == d.hotel_1){
+					compareValue = t.value;
+				}
+				else if(t.category == "location" && t.hotel == d.hotel_1){
+					compareLocation = t.value;
+				}
+				else if(t.category == "sleep_quality" && t.hotel == d.hotel_1){
+					compareSleepQaulity = t.value;
+				}
+				else if(t.category == "rooms" && t.hotel == d.hotel_1){
+					compareRooms = t.value;
+				}
+
+			})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("CleanlinessID");
+button.innerHTML = d.name_1;
+button.setAttribute('id',d.hotel_1);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_1+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+		d3.csv('service_ratings_avg.csv', function ( responset ) {
+			var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+			responset.forEach(function(t) {
+				if(t.category == "service" && t.hotel == d.hotel_2)
+					compareService = t.value;
+				else if(t.category == "cleanliness" && t.hotel == d.hotel_2){
+					compareCleanliness = t.value;
+				}
+				else if(t.category == "overall" && t.hotel == d.hotel_2){
+					compareOverall = t.value;
+				}
+				else if(t.category == "value" && t.hotel == d.hotel_2){
+					compareValue = t.value;
+				}
+				else if(t.category == "location" && t.hotel == d.hotel_2){
+					compareLocation = t.value;
+				}
+				else if(t.category == "sleep_quality" && t.hotel == d.hotel_2){
+					compareSleepQaulity = t.value;
+				}
+				else if(t.category == "rooms" && t.hotel == d.hotel_2){
+					compareRooms = t.value;
+				}
+
+			})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("CleanlinessID");
+button.innerHTML = d.name_2;
+button.setAttribute('id',d.hotel_2);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_2+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+		d3.csv('service_ratings_avg.csv', function ( responset ) {
+			var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+			responset.forEach(function(t) {
+				if(t.category == "service" && t.hotel == d.hotel_3)
+					compareService = t.value;
+				else if(t.category == "cleanliness" && t.hotel == d.hotel_3){
+					compareCleanliness = t.value;
+				}
+				else if(t.category == "overall" && t.hotel == d.hotel_3){
+					compareOverall = t.value;
+				}
+				else if(t.category == "value" && t.hotel == d.hotel_3){
+					compareValue = t.value;
+				}
+				else if(t.category == "location" && t.hotel == d.hotel_3){
+					compareLocation = t.value;
+				}
+				else if(t.category == "sleep_quality" && t.hotel == d.hotel_3){
+					compareSleepQaulity = t.value;
+				}
+				else if(t.category == "rooms" && t.hotel == d.hotel_3){
+					compareRooms = t.value;
+				}
+
+			})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("CleanlinessID");
+button.innerHTML = d.name_3;
+button.setAttribute('id',d.hotel_3);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_3+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+		d3.csv('service_ratings_avg.csv', function ( responset ) {
+			var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+			responset.forEach(function(t) {
+				if(t.category == "service" && t.hotel == d.hotel_4)
+					compareService = t.value;
+				else if(t.category == "cleanliness" && t.hotel == d.hotel_4){
+					compareCleanliness = t.value;
+				}
+				else if(t.category == "overall" && t.hotel == d.hotel_4){
+					compareOverall = t.value;
+				}
+				else if(t.category == "value" && t.hotel == d.hotel_4){
+					compareValue = t.value;
+				}
+				else if(t.category == "location" && t.hotel == d.hotel_4){
+					compareLocation = t.value;
+				}
+				else if(t.category == "sleep_quality" && t.hotel == d.hotel_4){
+					compareSleepQaulity = t.value;
+				}
+				else if(t.category == "rooms" && t.hotel == d.hotel_4){
+					compareRooms = t.value;
+				}
+
+			})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("CleanlinessID");
+button.innerHTML = d.name_4;
+button.setAttribute('id',d.hotel_4);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_4+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+
+	}
+//  
+else if(d.city==CityId && d.category == "service"){
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_1)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_1){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_1){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_1){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_1){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_1){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_1){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("ServiceID");
+button.innerHTML = d.name_1;
+button.setAttribute('id',d.hotel_1);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_1+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_2)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_2){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_2){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_2){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_2){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_2){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_2){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("ServiceID");
+button.innerHTML = d.name_2;
+button.setAttribute('id',d.hotel_2);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_2+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_3)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_3){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_3){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_3){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_3){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_3){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_3){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("ServiceID");
+button.innerHTML = d.name_3;
+button.setAttribute('id',d.hotel_3);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_3+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_4)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_4){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_4){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_4){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_4){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_4){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_4){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("ServiceID");
+button.innerHTML = d.name_4;
+button.setAttribute('id',d.hotel_4);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_4+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+
+}
+else if(d.city==CityId && d.category == "rooms"){
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_1)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_1){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_1){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_1){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_1){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_1){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_1){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("RoomID");
+button.innerHTML = d.name_1;
+button.setAttribute('id',d.hotel_1);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_1+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_2)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_2){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_2){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_2){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_2){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_2){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_2){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("RoomID");
+button.innerHTML = d.name_2;
+button.setAttribute('id',d.hotel_2);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_2+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_3)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_3){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_3){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_3){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_3){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_3){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_3){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("RoomID");
+button.innerHTML = d.name_3;
+button.setAttribute('id',d.hotel_3);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_3+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+	d3.csv('service_ratings_avg.csv', function ( responset ) {
+		var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+		responset.forEach(function(t) {
+			if(t.category == "service" && t.hotel == d.hotel_4)
+				compareService = t.value;
+			else if(t.category == "cleanliness" && t.hotel == d.hotel_4){
+				compareCleanliness = t.value;
+			}
+			else if(t.category == "overall" && t.hotel == d.hotel_4){
+				compareOverall = t.value;
+			}
+			else if(t.category == "value" && t.hotel == d.hotel_4){
+				compareValue = t.value;
+			}
+			else if(t.category == "location" && t.hotel == d.hotel_4){
+				compareLocation = t.value;
+			}
+			else if(t.category == "sleep_quality" && t.hotel == d.hotel_4){
+				compareSleepQaulity = t.value;
+			}
+			else if(t.category == "rooms" && t.hotel == d.hotel_4){
+				compareRooms = t.value;
+			}
+
+		})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("RoomID");
+button.innerHTML = d.name_4;
+button.setAttribute('id',d.hotel_4);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_4+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+
+}
+else if(d.city==CityId && d.category == "location"){
+// First Hotel
+d3.csv('service_ratings_avg.csv', function ( responset ) {
+	var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+	responset.forEach(function(t) {
+		if(t.category == "service" && t.hotel == d.hotel_1)
+			compareService = t.value;
+		else if(t.category == "cleanliness" && t.hotel == d.hotel_1){
+			compareCleanliness = t.value;
+		}
+		else if(t.category == "overall" && t.hotel == d.hotel_1){
+			compareOverall = t.value;
+		}
+		else if(t.category == "value" && t.hotel == d.hotel_1){
+			compareValue = t.value;
+		}
+		else if(t.category == "location" && t.hotel == d.hotel_1){
+			compareLocation = t.value;
+		}
+		else if(t.category == "sleep_quality" && t.hotel == d.hotel_1){
+			compareSleepQaulity = t.value;
+		}
+		else if(t.category == "rooms" && t.hotel == d.hotel_1){
+			compareRooms = t.value;
+		}
+
+	})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("SurroungingsID");
+button.innerHTML = d.name_1;
+button.setAttribute('id',d.hotel_1);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_1+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+d3.csv('service_ratings_avg.csv', function ( responset ) {
+	var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+	responset.forEach(function(t) {
+		if(t.category == "service" && t.hotel == d.hotel_2)
+			compareService = t.value;
+		else if(t.category == "cleanliness" && t.hotel == d.hotel_2){
+			compareCleanliness = t.value;
+		}
+		else if(t.category == "overall" && t.hotel == d.hotel_2){
+			compareOverall = t.value;
+		}
+		else if(t.category == "value" && t.hotel == d.hotel_2){
+			compareValue = t.value;
+		}
+		else if(t.category == "location" && t.hotel == d.hotel_2){
+			compareLocation = t.value;
+		}
+		else if(t.category == "sleep_quality" && t.hotel == d.hotel_2){
+			compareSleepQaulity = t.value;
+		}
+		else if(t.category == "rooms" && t.hotel == d.hotel_2){
+			compareRooms = t.value;
+		}
+
+	})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("SurroungingsID");
+button.innerHTML = d.name_2;
+button.setAttribute('id',d.hotel_2);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_2+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+d3.csv('service_ratings_avg.csv', function ( responset ) {
+	var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+	responset.forEach(function(t) {
+		if(t.category == "service" && t.hotel == d.hotel_3)
+			compareService = t.value;
+		else if(t.category == "cleanliness" && t.hotel == d.hotel_3){
+			compareCleanliness = t.value;
+		}
+		else if(t.category == "overall" && t.hotel == d.hotel_3){
+			compareOverall = t.value;
+		}
+		else if(t.category == "value" && t.hotel == d.hotel_3){
+			compareValue = t.value;
+		}
+		else if(t.category == "location" && t.hotel == d.hotel_3){
+			compareLocation = t.value;
+		}
+		else if(t.category == "sleep_quality" && t.hotel == d.hotel_3){
+			compareSleepQaulity = t.value;
+		}
+		else if(t.category == "rooms" && t.hotel == d.hotel_3){
+			compareRooms = t.value;
+		}
+
+	})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("SurroungingsID");
+button.innerHTML = d.name_3;
+button.setAttribute('id',d.hotel_3);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_3+")");
+button.setAttribute('class','inactive btn btn-success');
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+d3.csv('service_ratings_avg.csv', function ( responset ) {
+	var compareService=0, compareCleanliness=0, compareOverall=0, compareValue=0, compareLocation=0, compareSleepQaulity=0, compareRooms=0;
+	responset.forEach(function(t) {
+		if(t.category == "service" && t.hotel == d.hotel_4)
+			compareService = t.value;
+		else if(t.category == "cleanliness" && t.hotel == d.hotel_4){
+			compareCleanliness = t.value;
+		}
+		else if(t.category == "overall" && t.hotel == d.hotel_4){
+			compareOverall = t.value;
+		}
+		else if(t.category == "value" && t.hotel == d.hotel_4){
+			compareValue = t.value;
+		}
+		else if(t.category == "location" && t.hotel == d.hotel_4){
+			compareLocation = t.value;
+		}
+		else if(t.category == "sleep_quality" && t.hotel == d.hotel_4){
+			compareSleepQaulity = t.value;
+		}
+		else if(t.category == "rooms" && t.hotel == d.hotel_4){
+			compareRooms = t.value;
+		}
+
+	})
+// First Hotel
+var button = document.createElement("button");
+var newNumberListItem = document.createElement('li');
+var body = document.getElementById("SurroungingsID");
+button.innerHTML = d.name_4;
+button.setAttribute('id',d.hotel_4);
+button.setAttribute('data-compareId',CityHotelRef);
+button.setAttribute('data-compareService',compareService);
+button.setAttribute('data-compareCleanliness',compareCleanliness);
+button.setAttribute('data-compareOverall',compareOverall);
+button.setAttribute('data-compareValue',compareValue);
+button.setAttribute('data-compareLocation',compareLocation);
+button.setAttribute('data-compareSleepQaulity',compareSleepQaulity);
+button.setAttribute('data-compareRooms',compareRooms);
+button.setAttribute('onclick', "CallRadarChart("+CityHotelRef+", " + compareService + ", " + compareCleanliness + ", " + compareOverall + ", "+ compareValue + ", " + compareLocation + ", " + compareSleepQaulity + ","+ compareRooms+ ", "+d.hotel_4+")");
+button.setAttribute('class','inactive btn btn-success');
+
+button.style.width="100%";
+button.style.marginTop="1%";
+newNumberListItem.appendChild(button);
+body.appendChild(newNumberListItem);
+
+});
+}
+});
+
+});
+		}
+		else{
+
+		}
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+// appendButton(123);
+
+
+function CallRadarChart(CityHotelRef, compareService, compareCleanliness, compareOverall, compareValue, compareLocation, compareSleepQaulity,compareRooms,hotelId){
+	$('.Radar').show();
+	$('.radarChart').show();
+	var hotel1Name = $('.SelectedHotelNameHidden').html(), hotel2Name = $("#"+hotelId).html();
+	// var hotel1Name = "", hotel2Name = "";
+	// alert($('.SelectedHotelNameHidden').html());
+
+// d3.csv('service_ratings_avg.csv', function ( response ) {
+// //console.log(response[0]);
+
+// response.forEach(function(d) {
+// if(d.hotel == CityHotelRef){
+// 	hotel1Name = d.name;
+// }
+// else if(d.hotel == hotelId){
+// 	hotel2Name = d.name;
+// }
+// });
+// });
+// alert(hotel1Name);
+var compareService1=$(".SelectedHotelNameHidden").attr("service"), compareCleanliness1=$(".SelectedHotelNameHidden").attr("cleanliness"), compareOverall1=$(".SelectedHotelNameHidden").attr("overall"), compareValue1=$(".SelectedHotelNameHidden").attr("value"), compareLocation1=$(".SelectedHotelNameHidden").attr("location"), compareSleepQaulity1=$(".SelectedHotelNameHidden").attr("sleep_quality"), compareRooms1=$(".SelectedHotelNameHidden").attr("rooms");
+
+			//////////////////////////////////////////////////////////////
+			//////////////////////// Set-Up //////////////////////////////
+			//////////////////////////////////////////////////////////////
+
+			var margin = { top: 50, right: 80, bottom: 50, left: 80 },
+				width = Math.min(700, window.innerWidth / 4) - margin.left - margin.right,
+				height = Math.min(width, window.innerHeight - margin.top - margin.bottom);
+
+			//////////////////////////////////////////////////////////////
+			////////////////////////// Data //////////////////////////////
+			//////////////////////////////////////////////////////////////
+
+	var data =
+	[
+	{
+		"name": hotel1Name,
+		"axes":[
+		{"axis":"Best Service", "value":compareService1},
+		{"axis":"Cleanliness", "value":compareCleanliness1 },
+		{"axis":"Overall", "value": compareOverall1},
+		{"axis":"Value for money", "value":compareValue1 },
+		{"axis":"Surroungings", "value":compareLocation1  },
+		{"axis":"Sleep Quality", "value":compareSleepQaulity1},
+		{"axis":"Rooms Quality", "value":compareRooms1}
+		]
+	},
+	{
+		"name": hotel2Name,
+		"axes":[
+		{"axis":"Best Service", "value":compareService},
+		{"axis":"Cleanliness", "value":compareCleanliness },
+		{"axis":"Overall", "value": compareOverall},
+		{"axis":"Value for money", "value":compareValue },
+		{"axis":"Surroungings", "value":compareLocation  },
+		{"axis":"Sleep Quality", "value":compareSleepQaulity},
+		{"axis":"Rooms Quality", "value":compareRooms}
+		]
+	}
+	];
+
+			// Draw the chart, get a reference the created svg element :
+			// let svg_radar1 = RadarChart(".radarChart", data, radarChartOptions);
+
+			//////////////////////////////////////////////////////////////
+			///// Second example /////////////////////////////////////////
+			///// Chart legend, custom color, custom unit, etc. //////////
+			//////////////////////////////////////////////////////////////
+			var radarChartOptions2 = {
+			  w: 400,
+			  h: 450,
+			  margin: margin,
+			  maxValue: 5,
+			  levels: 5,
+			  roundStrokes: true,
+			  color: d3.scaleOrdinal().range(["#0fbb25", "#ef1538"]),
+				format: '.0f',
+				legend: { title: " Comparing " + hotel1Name + " and " + hotel2Name, translateX: 100, translateY: 40 },
+				unit: ''
+			};
+
+			// Draw the chart, get a reference the created svg element :
+			let svg_radar2 = RadarChart("#radarChart", data, radarChartOptions2);
+
+
+
+// alert(CityHotelRef);
+// alert(hotel1Name);
+// alert(hotel2Name);
+
+// //rADAR CHART
+// var compareService1=2, compareCleanliness1=3, compareOverall1=5, compareValue1=4, compareLocation1=5, compareSleepQaulity1=4, compareRooms1=5;
+// var color = d3.scale.ordinal()
+// 	.range(["#0fbb25","#ef1538"]);
+// 	$("#radarChart").html("")
+// 	var radarChartOptions = {
+// 		width: 600,
+// 		height: 600,
+// 		color: color
+// 	};
+
+// 	radarChart = RadarChart()
+
+// 	d3.select('#radarChart')
+// 	.call(radarChart);
+
+// 	radarChart.options(radarChartOptions).update();
+// 	var data =
+// 	[
+// 	{
+// 		"key":hotel1Name,
+// 		"values":[
+// 		{"axis":"Best Service", "value":compareService1},
+// 		{"axis":"Cleanliness", "value":compareCleanliness1 },
+// 		{"axis":"Overall", "value": compareOverall1},
+// 		{"axis":"Value for money", "value":compareValue1 },
+// 		{"axis":"Surroungings", "value":compareLocation1  },
+// 		{"axis":"Sleep Quality", "value":compareSleepQaulity1},
+// 		{"axis":"Rooms Quality", "value":compareRooms1}
+// 		]
+// 	},
+// 	{
+// 		"key":hotel2Name,
+// 		"values":[
+// 		{"axis":"Best Service", "value":compareService},
+// 		{"axis":"Cleanliness", "value":compareCleanliness },
+// 		{"axis":"Overall", "value": compareOverall},
+// 		{"axis":"Value for money", "value":compareValue },
+// 		{"axis":"Surroungings", "value":compareLocation  },
+// 		{"axis":"Sleep Quality", "value":compareSleepQaulity},
+// 		{"axis":"Rooms Quality", "value":compareRooms}
+// 		]
+// 	}
+// 	];
+
+
+// 	setTimeout(function() {
+// 		radarChart.data(data).duration(1000).update();
+// 		radarChart.options({'legend': {display: true}});
+// 		radarChart.colors({player1: "#0fbb25", player2: "#ef1538"}).update();
+
+
+// 	}, 300);	
+// 	d3.select("#MatchWinner").html(" Comparing " +hotel1Name + " and " + hotel2Name );
+
+
+}
+
+
+
+
+
+
+</script>
+
+
+<!-- Anh Script -->
+
+<script type="text/javascript">
+
+
+
+function myFunction(ID) {
+  // console.log("vao day")
+  // console.log(ID)
+  
+  var object = ID.substring(ID.indexOf("-") + 1);
+  console.log(object)
+  var dots = document.getElementById ("dots-"+ object);
+  var moreText = document.getElementById ("more-"+ object);
+  var btnText = document.getElementById ("myBtn-"+ object);
+  var arrow = document.getElementById ("arrow-"+ object);
+  console.log(dots)
+  if (dots.style.display === "none") {
+    
+    dots.style.display = "inline";
+    // btnText.innerHTML = "<span class='glyphicon glyphicon-collapse-down'></span> Read more";
+    setTimeout(function(){
+      moreText.style.display = "none";
+      btnText.innerHTML = "Read more <span class='glyphicon glyphicon-collapse-down'></span>";
+      // document.getElementById("arrow-"+object).className = "glyphicon glyphicon-collapse-down"
+    },400); // timed to match animation-duration
+    
+  } else {
+    dots.style.display = "none";
+    // btnText.innerHTML = "<span class='glyphicon glyphicon-collapse-up'></span> Read less"; 
+    setTimeout(function(){
+      moreText.style.display = "inline";
+      btnText.innerHTML = "Read less <span class='glyphicon glyphicon-collapse-up'></span>";
+      // document.getElementById("arrow-"+object).className = "glyphicon glyphicon-collapse-up"
+    },400); // timed to match animation-duration
+  }
+}
+
+function test(data){
+    // console.log(data)
+}
+
+
+function comment(HotelID) {
+
+var hotelinfo;
+var hotelRating;
+var hotelComments= [];
+
+
+//Reading hotel info
+d3.csv('hotel_meta.csv', function ( responset ) {
+	responset.forEach(function(t) {
+		
+		if(t.hotel_id == HotelID){
+			hotelinfo = t.html + t.html1 + t.html2 + t.html3 + t.html4 + t.html5 + t.html6 + t.html7;
+		}
+	});
+});
+
+
+//Reading rating for smiling face
+d3.csv('sentiment.csv', function ( responset ) {
+	responset.forEach(function(t) {
+		if(t.HotelID == HotelID){
+			hotelRating = t.Ratings;
+		}
+
+	});
+});
+
+
+//  Reading comments
+d3.csv('text_summary.csv', function ( responset ) {
+	responset.forEach(function(t) {
+		if(t.HotelID == HotelID){
+			hotelComments.push(t.S1);
+			hotelComments.push(t.same1);
+			hotelComments.push(t.S2);
+			hotelComments.push(t.same2);
+			hotelComments.push(t.S3);
+			hotelComments.push(t.same3);
+			hotelComments.push(t.S4);
+			hotelComments.push(t.same4);
+			hotelComments.push(t.S5);
+			hotelComments.push(t.same5);
+		}
+
+
+	});
+});
+
+
+
+setTimeout(function(){
+	showHotelInfo(hotelinfo,hotelRating,hotelComments)
+},2000);
+
+}
+
+function showHotelInfo(hotelinfo1,hotelRating1,hotelComments1){
+hotelinfo1 = hotelinfo1.substring(0,hotelinfo1.length-1);
+console.log(hotelComments1);
+// console.log(hotelComments1["0"]);
+// console.log(hotelComments1);
+// console.log(hotelComments1.S1);
+// alert(hotelinfo1);
+    // console.log(dataset)
+    // console.log(dataSentiment)
+
+// var svg = d3.select(".row").append("div").attr("class","list-group");
+var svg = d3.select(".container")
+var overall = svg.append("div").attr("class"," Anh row")
+overall.append("div").attr("class","media1 col-md-3")
+overall.append("div").attr("class","media1 col-md-2").attr("style","text-align: center").call(chernoffFace(hotelRating1))
+var infoOverall = overall.append("div").attr("class","media1 col-md-4").attr("style","margin:auto 0").html(hotelinfo1);
+// infoOverall.append("h3").attr("style","font-size: 1.50rem;font-weight: bold;").text("Alexis Hotel - a Kimpton Hotel")
+// infoOverall.append("h5").attr("style","font-size: 1.00rem;font-weight: bold;").text("6440 W Sam Houston Pkwy S, Houston")
+// var overallRating = infoOverall.append("div").attr("class","stars")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// var overallRating = infoOverall.append("div").attr("class","star-ratings-sprite")
+// overallRating.append("span").attr("class","star-ratings-sprite-rating").attr("style","width: " + 80 + "%;")
+    for (var i = 0 ; i < 10; i=i+2) {
+        // var list_group = svg.append("a").attr("href","#").attr("class","list-group-item")
+        var list_group = svg.append("div").attr("class","row Anh")
+        // list_group.append("div").attr("class","media col-md-2")
+        // .append("figure").attr("class","pull-left").attr("id","hotel-"+dataset[i]["HotelID"]);
+        // // .append("img").attr("src","http://placehold.it/350x250").attr("class","media-object img-rounded img-responsive");
+        // // console.log(dataSentiment[i])
+        // d3.select("#hotel-"+dataset[i]["HotelID"]).append("div").attr("id","face-"+dataSentiment[i]["HotelID"])
+        // .call(chernoffFace(dataSentiment[i]["Ratings"]))
+        
+        var row = list_group.append("div").attr("class","col-md-3").attr("style","margin:auto")
+        var row_img = row.append("div").attr("class","row profile")
+        row_img.append("div").attr("style","text-align:center").attr("class","col-md-4").append("img").attr("src","http://placekitten.com/50/50").attr("style","width:68%").attr("style","border-radius:50%;width:68%")
+        row_img.append("div").attr("class","col-md-8").attr("style", "margin:auto").append("h5").text("French1976")
+
+        row.append("h6").text("Number of Helpful Votes: 30")
+        row.append("h6").text("Number of Reviews: 30")
+        row.append("h6").text("Number of Cities: 30")
+
+        var text = list_group.append("div").attr("class","AnhLeftRight col-md-6")
+        // text.append("h4").attr("class","list-group-item-heading").text("List group heading")
+        // text.append("p").attr("class","list-group-item-text").text(dataset[0]["S"+i]);
+        // text.append("h6").attr("class","list-group-item-heading sub-text").text("on December 18, 2012")
+        var textP= text.append("p").attr("class","list-group-item-text");
+        textP.append("span").attr("class","teaser").text(hotelComments1[i].substring(0,400));
+        textP.append("span").attr("id","dots-"+i/2 + 1).text("...");
+        textP.append("span").attr("class","teaser").attr("id","more-"+i/2 + 1).attr("style","display:none;transition: height 1s").text(hotelComments1[i].substring(500));
+        //text.append("span").attr("class","glyphicon glyphicon-collapse-down")
+        text.append("span").attr("onclick","myFunction(this.id)").attr("id","myBtn-" +i/2 + 1 ).text('Read More ').attr("class","teaser buttonRead")
+        .append("span").attr("class","glyphicon glyphicon-collapse-down").attr("id","arrow-"+i/2 + 1)
+        //.attr("style","background:lightblue;color:navy;font-size:13px;padding:3px;cursor:pointer;")
+        // textP.append("span").attr("class","more").text("more...");
+
+        //can append small in div
+        var rating = list_group.append("div").attr("class","col-md-3 text-center").attr("style","margin:auto");
+        rating.append("h2").text(hotelComments1[i+1]).append("small").text(" similar comments")
+        //rating.append("button").attr("type","button").attr("class","btn btn-primary btn-lg btn-block").text("Vote Now!");
+        // var stars = rating.append("div").attr("class","stars")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+
+        //<div class="star-ratings-sprite"><span style="width:52%" class="star-ratings-sprite-rating"></span></div>
+        var stars = rating.append("div").attr("class","star-ratings-sprite")
+        stars.append("span").attr("class","star-ratings-sprite-rating").attr("style","width: " + i*10 + "%;")
+
+        rating.append("p").text(hotelComments1[i+1] + " people found this helpful").attr("style","margin-top: 10px;");
+        //svg.append("br")
+    }
+}
+
+// const dataHeader = ["HotelID","same1","same2","same3", "same4", "same5"];
+// function type(d) {
+//         for (i = 0; i < dataHeader.length; i ++) {
+//             // console.log(dataHeader[i] + "1")
+//             d[dataHeader[i]] = +d[dataHeader[i]]
+//         }
+//         // d["year"] = +d["year"];
+//         // console.log(d);
+//         dataset.push(d)
+//         return d;
+//     }
+
+    // function type2(d) {
+    //     // for (i = 0; i < dataHeader.length; i ++) {
+    //     //     // console.log(dataHeader[i] + "1")
+    //     //     d[dataHeader[i]] = +d[dataHeader[i]]
+    //     // }
+    //     d["HotelID"] = +d["HotelID"]
+    //     d["Ratings"] = +d["Ratings"]
+    //     // d["year"] = +d["year"];
+    //     // console.log(d);
+    //     dataSentiment.push(d)
+    //     return d;
+    // }
+// var dataset = []
+// var dataSentiment = []
+// d3.csv("text_summary.csv", type, test);
+// d3.csv("sentiment.csv", type2, test);
+//     setTimeout(function(){
+//         comment();
+// },600);
+
+
+
+
+        function chernoffFace(variable) {
+        	// alert(variable);
+            console.log(variable)
+          var width = 100,
+            height = 180;
+          var chernoff = d3.chernoff()
+              .face(0)
+            //   .hair(function(d) { return d.h; })
+              .mouth(variable)
+              .nosew(0.3)
+              .noseh( 0.5)
+              .eyew(0.5)
+              .eyeh(0.5)
+              .brow(0);
+          function gauge(elem) {
+            return d3.select(elem.parentNode.parentNode).select('.gauge')
+          }
+          function control() {
+            return d3.select("#controller")
+          }
+          function data() {
+            var d = {};
+            control()
+              .selectAll('input[type="range"]')
+              .each(function () {
+                d[this.name] = this.value;
+              });
+            return [d];
+          }
+          function drawFace(selection) {
+            var svg = selection.append("svg")
+              .attr("width", width)
+              .attr("height", height);
+            var face = svg.selectAll("g.chernoff")
+                .data(data())
+              .enter().append("g")
+                .attr("class", "chernoff")
+                .call(chernoff);
+          }
+          function updateFace(selection) {
+            selection.select("svg")
+                .selectAll("g.chernoff")
+                .remove();
+            // chernoff will not draw on update selections
+            selection.select("svg")
+                .selectAll("g.chernoff")
+                .append("g")
+                .attr("class", "chernoff")
+                .call(chernoff);
+          }
+          function bindControl(selection) {
+            control()
+              .selectAll('input[type="range"]')
+                .each(function () {
+                  gauge(this)
+                    .text(this.value);
+                })
+                .on('input', function () {
+                  gauge(this)
+                    .text(this.value);
+                  selection.call(updateFace);
+                });
+          }
+          function draw(selection) {
+            selection
+              .call(drawFace)
+            //   .call(bindControl);
+          }
+          return draw;
+        }
+
+        // d3.select("#face")
+        //   .call(chernoffFace(0.5));  
+        // ;
+
+        // d3.select("#face2")
+        //   .call(chernoffFace(0.9));  
+        // ;
+
+        $(document).ready(function(){
+        $(".more").toggle(function(){
+        console.log("AAAAAAA") 
+        $(this).text("less..").siblings(".complete").show();    
+    }, function(){
+        $(this).text("more..").siblings(".complete").hide();    
+    });
+
+    $("g").click(function(){
+        console.log("BBBBBBBBB") 
+
+    });
+});
+
+function showCloud(hotelId){
+	var wordCloud = [];
+	// alert(hotelId);
+	d3.csv('World_Cloud/'+hotelId+'.csv', function ( responset ) {
+	responset.forEach(function(t) {
+		t.Frq =+ t.Frq;
+		wordCloud.push(t);
+	});
+});
+
+	setTimeout(function(){
+		drawWordCloud(wordCloud)
+},200);
+
+	// drawWordCloud(wordCloud);
+
+}
+
+
+
+</script>

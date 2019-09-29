@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+<head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script> -->
+<script src="http://d3js.org/d3.v3.min.js"></script>
+    <script src="chernoff-comment.js"></script>
+<style>
+a.list-group-item {
+    height:auto;
+    min-height:220px;
+}
+a.list-group-item.active small {
+    color:#fff;
+}
+.stars {
+    margin:20px auto 1px;    
+}
+.list-group-item-text {
+    /* overflow-wrap: break-word; */
+  /* word-wrap: break-word;
+  hyphens: auto; */
+  /* word-break: break-all; */
+  /* height:160px;
+
+  overflow: auto; */
+ /*  word-wrap: break-word;
+  white-space: pre; */
+}
+div img {
+  width:100%;
+  border-radius:50%;
+}
+
+.sub-text {
+    color:#aaa;
+    font-family:verdana;
+    font-size:11px;
+}
+.container {
+  border-left: 2px solid #ddd;
+}
+/*difference between margin and padding*/
+.row {
+    /* border-left: 2px solid #ddd; */
+    border-bottom: 2px solid #ddd;
+    padding-bottom: 20px;
+    margin-top: 10px
+}
+
+.col-md-9 {
+    border-right: 4px solid #ddd;
+}
+
+.col-md-5 {
+    padding-left: 10px;
+}
+
+.profile {
+    border: 0px;
+    padding-bottom: 10px;
+    /* padding-top: 10px; */
+    /* border-bottom: 4px solid #ddd; */
+}
+
+.complete{
+    display:none;
+}
+
+.buttonRead{
+    /* background:lightblue; */
+    color:navy;
+    font-size:13px;
+    padding-top:5px;
+    border-bottom:15px;
+    cursor:pointer;
+    /* display: none; */
+}
+
+.star-ratings-sprite {
+  background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+  font-size: 0;
+  height: 21px;
+  line-height: 0;
+  overflow: hidden;
+  text-indent: -999em;
+  width: 110px;
+  margin: 0 auto;
+}
+  .star-ratings-sprite-rating {
+    background: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/2605/star-rating-sprite.png") repeat-x;
+    background-position: 0 100%;
+    float: left;
+    height: 21px;
+    display:block;
+  }
+</style>
+</head>
+<body>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="container">
+    <div class="row">
+		<div class="well">
+                <!-- <div id="face"></div>
+                <div id="face2"></div>
+        <h1 class="text-center">Vote for your favorite</h1> -->
+            <!-- <div class="list-group">
+            </div> -->
+        </div>
+	</div>
+</div>
+
+<script type="text/javascript">
+
+function myFunction(ID) {
+  console.log("vao day")
+  console.log(ID)
+  
+  var object = ID.substring(ID.indexOf("-") + 1);
+  console.log(object)
+  var dots = document.getElementById ("dots-"+ object);
+  var moreText = document.getElementById ("more-"+ object);
+  var btnText = document.getElementById ("myBtn-"+ object);
+  var arrow = document.getElementById ("arrow-"+ object);
+  console.log(dots)
+  if (dots.style.display === "none") {
+    
+    dots.style.display = "inline";
+    // btnText.innerHTML = "<span class='glyphicon glyphicon-collapse-down'></span> Read more";
+    setTimeout(function(){
+      moreText.style.display = "none";
+      btnText.innerHTML = "Read more <span class='glyphicon glyphicon-collapse-down'></span>";
+      // document.getElementById("arrow-"+object).className = "glyphicon glyphicon-collapse-down"
+    },400); // timed to match animation-duration
+    
+  } else {
+    dots.style.display = "none";
+    // btnText.innerHTML = "<span class='glyphicon glyphicon-collapse-up'></span> Read less"; 
+    setTimeout(function(){
+      moreText.style.display = "inline";
+      btnText.innerHTML = "Read less <span class='glyphicon glyphicon-collapse-up'></span>";
+      // document.getElementById("arrow-"+object).className = "glyphicon glyphicon-collapse-up"
+    },400); // timed to match animation-duration
+  }
+}
+
+function test(data){
+    // console.log(data)
+}
+function comment() {
+    console.log(dataset)
+    // console.log(dataSentiment)
+
+// var svg = d3.select(".row").append("div").attr("class","list-group");
+var svg = d3.select(".container")
+var overall = svg.append("div").attr("class","row")
+overall.append("div").attr("class","media col-md-3")
+overall.append("div").attr("class","media col-md-2") .call(chernoffFace(dataSentiment[1]["Ratings"]))
+var infoOverall = overall.append("div").attr("class","media col-md-4") ;
+infoOverall.append("h2").text("Hotel California")
+infoOverall.append("h4").text("6440 W Sam Houston Pkwy S, Houston")
+// var overallRating = infoOverall.append("div").attr("class","stars")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+// overallRating.append("span").attr("class","glyphicon glyphicon-star")
+var overallRating = infoOverall.append("div").attr("class","star-ratings-sprite")
+overallRating.append("span").attr("class","star-ratings-sprite-rating").attr("style","width: " + 50 + "%;")
+    for (var i = 1 ; i <= 5; i++) {
+        // var list_group = svg.append("a").attr("href","#").attr("class","list-group-item")
+        var list_group = svg.append("div").attr("class","row")
+        // list_group.append("div").attr("class","media col-md-2")
+        // .append("figure").attr("class","pull-left").attr("id","hotel-"+dataset[i]["HotelID"]);
+        // // .append("img").attr("src","http://placehold.it/350x250").attr("class","media-object img-rounded img-responsive");
+        // // console.log(dataSentiment[i])
+        // d3.select("#hotel-"+dataset[i]["HotelID"]).append("div").attr("id","face-"+dataSentiment[i]["HotelID"])
+        // .call(chernoffFace(dataSentiment[i]["Ratings"]))
+        
+        var row = list_group.append("div").attr("class","col-md-2")
+        var row_img = row.append("div").attr("class","row profile")
+        row_img.append("div").attr("class","col-md-5").append("img").attr("src","http://placekitten.com/50/50")
+        row_img.append("div").attr("class","col-md-7").append("h5").text("French1976")
+
+        row.append("h6").text("Number of Helpful Votes: 30")
+        row.append("h6").text("Number of Reviews: 30")
+        row.append("h6").text("Number of Cities: 30")
+
+        var text = list_group.append("div").attr("class","col-md-7")
+        text.append("h4").attr("class","list-group-item-heading").text("List group heading")
+        // text.append("p").attr("class","list-group-item-text").text(dataset[0]["S"+i]);
+        text.append("h6").attr("class","list-group-item-heading sub-text").text("on December 18, 2012")
+        var textP= text.append("p").attr("class","list-group-item-text");
+        textP.append("span").attr("class","teaser").text(dataset[i]["S1"].substring(0,500));
+        textP.append("span").attr("id","dots-"+i).text("...");
+        textP.append("span").attr("id","more-"+i).attr("style","display:none;transition: height 1s").text(dataset[i]["S1"].substring(500));
+        //text.append("span").attr("class","glyphicon glyphicon-collapse-down")
+        text.append("span").attr("onclick","myFunction(this.id)").attr("id","myBtn-" +i ).text('Read More ').attr("class","buttonRead")
+        .append("span").attr("class","glyphicon glyphicon-collapse-down").attr("id","arrow-"+i)
+        //.attr("style","background:lightblue;color:navy;font-size:13px;padding:3px;cursor:pointer;")
+        // textP.append("span").attr("class","more").text("more...");
+
+        //can append small in div
+        var rating = list_group.append("div").attr("class","col-md-3 text-center")
+        rating.append("h2").text(dataset[0]["same" + i]).append("small").text(" similar comments")
+        //rating.append("button").attr("type","button").attr("class","btn btn-primary btn-lg btn-block").text("Vote Now!");
+        // var stars = rating.append("div").attr("class","stars")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+        // stars.append("span").attr("class","glyphicon glyphicon-star")
+
+        //<div class="star-ratings-sprite"><span style="width:52%" class="star-ratings-sprite-rating"></span></div>
+        var stars = rating.append("div").attr("class","star-ratings-sprite")
+        stars.append("span").attr("class","star-ratings-sprite-rating").attr("style","width: " + i*10 + "%;")
+
+        rating.append("p").text(dataset[i]["same2"] + " people found this helpful").attr("style","margin-top: 10px;");
+        //svg.append("br")
+    }
+}
+
+const dataHeader = ["HotelID","same1","same2","same3", "same4", "same5"];
+function type(d) {
+        for (i = 0; i < dataHeader.length; i ++) {
+            // console.log(dataHeader[i] + "1")
+            d[dataHeader[i]] = +d[dataHeader[i]]
+        }
+        // d["year"] = +d["year"];
+        // console.log(d);
+        dataset.push(d)
+        return d;
+    }
+
+    function type2(d) {
+        // for (i = 0; i < dataHeader.length; i ++) {
+        //     // console.log(dataHeader[i] + "1")
+        //     d[dataHeader[i]] = +d[dataHeader[i]]
+        // }
+        d["HotelID"] = +d["HotelID"]
+        d["Ratings"] = +d["Ratings"]
+        // d["year"] = +d["year"];
+        // console.log(d);
+        dataSentiment.push(d)
+        return d;
+    }
+var dataset = []
+var dataSentiment = []
+d3.csv("text_summary.csv", type, test);
+d3.csv("sentiment.csv", type2, test);
+    setTimeout(function(){
+        comment();
+},600);
+        function chernoffFace(variable) {
+            console.log(variable)
+          var width = 100,
+            height = 180;
+          var chernoff = d3.chernoff()
+              .face(0)
+            //   .hair(function(d) { return d.h; })
+              .mouth(variable)
+              .nosew(0.3)
+              .noseh( 0.5)
+              .eyew(0.5)
+              .eyeh(0.5)
+              .brow(0);
+          function gauge(elem) {
+            return d3.select(elem.parentNode.parentNode).select('.gauge')
+          }
+          function control() {
+            return d3.select("#controller")
+          }
+          function data() {
+            var d = {};
+            control()
+              .selectAll('input[type="range"]')
+              .each(function () {
+                d[this.name] = this.value;
+              });
+            return [d];
+          }
+          function drawFace(selection) {
+            var svg = selection.append("svg")
+              .attr("width", width)
+              .attr("height", height);
+            var face = svg.selectAll("g.chernoff")
+                .data(data())
+              .enter().append("g")
+                .attr("class", "chernoff")
+                .call(chernoff);
+          }
+          function updateFace(selection) {
+            selection.select("svg")
+                .selectAll("g.chernoff")
+                .remove();
+            // chernoff will not draw on update selections
+            selection.select("svg")
+                .selectAll("g.chernoff")
+                .append("g")
+                .attr("class", "chernoff")
+                .call(chernoff);
+          }
+          function bindControl(selection) {
+            control()
+              .selectAll('input[type="range"]')
+                .each(function () {
+                  gauge(this)
+                    .text(this.value);
+                })
+                .on('input', function () {
+                  gauge(this)
+                    .text(this.value);
+                  selection.call(updateFace);
+                });
+          }
+          function draw(selection) {
+            selection
+              .call(drawFace)
+            //   .call(bindControl);
+          }
+          return draw;
+        }
+        d3.select("#face")
+          .call(chernoffFace(0.5));  
+        ;
+
+        d3.select("#face2")
+          .call(chernoffFace(0.9));  
+        ;
+
+        $(document).ready(function(){
+        $(".more").toggle(function(){
+        console.log("AAAAAAA") 
+        $(this).text("less..").siblings(".complete").show();    
+    }, function(){
+        $(this).text("more..").siblings(".complete").hide();    
+    });
+
+    $("g").click(function(){
+        console.log("BBBBBBBBB") 
+
+    });
+});
+</script>
+
+</body>
+</html>
